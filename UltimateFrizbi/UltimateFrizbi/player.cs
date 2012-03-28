@@ -32,6 +32,8 @@ namespace UltimateFrizbi
         int currentPivot;
         public bool pivotChosen;
         int screenHeight, screenWidth;
+        KeyboardState lastKbs;
+
 
         public int Score
         {
@@ -66,53 +68,60 @@ namespace UltimateFrizbi
         private void ProcessKeyboard()
         {
             KeyboardState keybState = Keyboard.GetState();
-            if (!pivotChosen)
+            if (lastKbs != null)
             {
-                if (keybState.IsKeyDown(Keys.Left))
+                if (!pivotChosen)
                 {
-                    currentPivot = (currentPivot + 1) % 3;             
+                    if (keybState.IsKeyDown(Keys.Left) && lastKbs.IsKeyUp(Keys.Left))
+                    {
+                        currentPivot = (currentPivot - 1) % 3;
+                    }
+                    if (keybState.IsKeyDown(Keys.Right) && lastKbs.IsKeyUp(Keys.Right))
+                        currentPivot = (currentPivot + 1) % 3;
+                    //choose player
+                    if (keybState.IsKeyDown(Keys.Enter) && lastKbs.IsKeyUp(Keys.Enter))
+                    {
+                        pivotChosen = true;
+                    }
                 }
-                if (keybState.IsKeyDown(Keys.Right))
-                    currentPivot = (currentPivot + 1) % 3;
-                //choose player
-                if (keybState.IsKeyDown(Keys.Enter))
+                else
                 {
-                    pivotChosen = true;
-                }
-            } else
-            {
-                //Angle
-                if (keybState.IsKeyDown(Keys.Left))
-                    pivots[currentPivot].angle = (pivots[currentPivot].angle - 0.01f) % (2 * MathHelper.Pi);
-                if (keybState.IsKeyDown(Keys.Right))
-                    pivots[currentPivot].angle = (pivots[currentPivot].angle + 0.01f) % (2 * MathHelper.Pi); 
-                //power
-                if (keybState.IsKeyDown(Keys.Down))
-                    pivots[currentPivot].power -= 1;
-                if (keybState.IsKeyDown(Keys.Up))
-                    pivots[currentPivot].power += 1;
-                //fix power
-                if (pivots[currentPivot].power > 100)
+                    //Angle
+                    if (keybState.IsKeyDown(Keys.Left))
+                        pivots[currentPivot].angle = (pivots[currentPivot].angle - 0.05f);
+                    if (keybState.IsKeyDown(Keys.Right))
+                        pivots[currentPivot].angle = (pivots[currentPivot].angle + 0.05f);
+                    if (pivots[currentPivot].angle < 0)
+                        pivots[currentPivot].angle += (2 * MathHelper.Pi);
+                    //power
+                    if (keybState.IsKeyDown(Keys.Down))
+                        pivots[currentPivot].power -= 1;
+                    if (keybState.IsKeyDown(Keys.Up))
+                        pivots[currentPivot].power += 1;
+                    //fix power
+                    if (pivots[currentPivot].power > 100)
                         pivots[currentPivot].power = 100;
-                if (pivots[currentPivot].power < 0)
-                    pivots[currentPivot].power = 0;
-                //move pivot
-                if (keybState.IsKeyDown(Keys.Enter))
-                {
-                    calcPivotPosition(currentPivot);
-                    pivotChosen = false;
+                    if (pivots[currentPivot].power < 0)
+                        pivots[currentPivot].power = 0;
+                    //move pivot
+                    if (keybState.IsKeyDown(Keys.Enter) && lastKbs.IsKeyUp(Keys.Enter))
+                    {
+                        calcPivotPosition(currentPivot);
+                        pivotChosen = false;
+                    }
                 }
             }
+            lastKbs = keybState;
         }
 
         private void calcPivotPosition(int pivot)
         {
-            pivots[currentPivot].Position.X += (float)Math.Cos(pivots[currentPivot].angle) * pivots[currentPivot].power/10;
+            pivots[currentPivot].Position.X += (float)Math.Cos(pivots[currentPivot].angle) * pivots[currentPivot].power;
             if (pivots[currentPivot].Position.X > screenWidth - 69)
                 pivots[currentPivot].Position.X = screenWidth - 69;
             if (pivots[currentPivot].Position.X < 42)
                 pivots[currentPivot].Position.X = 42;
-            pivots[currentPivot].Position.Y += (float)Math.Sin(pivots[currentPivot].angle) * pivots[currentPivot].power/10;
+            pivots[currentPivot].Position.Y += (float)Math.Sin(pivots[currentPivot].angle) * pivots[currentPivot].power;
             if (pivots[currentPivot].Position.Y > screenHeight - 50)
                 pivots[currentPivot].Position.Y = screenHeight - 50;
             if (pivots[currentPivot].Position.Y < 20)
@@ -135,7 +144,7 @@ namespace UltimateFrizbi
                 {
                     spriteBatch.Draw(PlayerTexture, pivots[i].rec, null, Color.Tan);
                     spriteBatch.DrawString(playerFont, "Power:" + pivots[i].power + "\nAngle:" +
-                        (int)MathHelper.ToDegrees(pivots[i].angle), pivots[i].Position + (pivots[i].Position.Y < screenHeight - 100 ? new Vector2(0, 50) : -new Vector2(0, 50)), Color.Black);
+                        (int)MathHelper.ToDegrees((pivots[i].angle) % (2 * MathHelper.Pi)), pivots[i].Position + (pivots[i].Position.Y < screenHeight - 100 ? new Vector2(0, 50) : -new Vector2(0, 50)), Color.Black);
                 }
             }
         }
