@@ -20,7 +20,7 @@ namespace UltimateFrizbi
     class player
     {
         const int numberOfPivots = 3;
-        const int size = 15;
+        const int size = 30;
 
         public Texture2D PlayerTexture;
         Color playerColor;
@@ -42,7 +42,7 @@ namespace UltimateFrizbi
 
             for (int i = 0; i < numberOfPivots; i++)
             {
-                pivots[i].Position = position + new Vector2(i*30,0);
+                pivots[i].Position = position + new Vector2(i*40,-size/2);
                 pivots[i].hasFrizbi = false;
                 pivots[i].Active = false;
                 pivots[i].rec = new Rectangle((int)pivots[i].Position.X,(int)pivots[i].Position.Y, size, size);

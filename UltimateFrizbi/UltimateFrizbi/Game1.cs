@@ -79,7 +79,8 @@ namespace UltimateFrizbi
             player2Goal = new Rectangle(screenWidth - 52, (screenHeight / 2) - 64, 32, 128);
             fieldRectnagle = new Rectangle(0, 0, screenWidth, screenHeight);
             // Load the player resources 
-            redPlayer.Initialize(Content.Load<Texture2D>(@"player"), new Vector2(50,screenHeight/2),Color.OrangeRed);
+            redPlayer.Initialize(Content.Load<Texture2D>(@"player"), new Vector2(screenWidth-211,screenHeight/2),Color.OrangeRed);
+            bluePlayer.Initialize(Content.Load<Texture2D>(@"player"), new Vector2(105, screenHeight / 2), Color.BlueViolet);
 
             // TODO: use this.Content to load your game content here
         }
@@ -121,6 +122,7 @@ namespace UltimateFrizbi
             spriteBatch.Begin();
             DrawField();
             redPlayer.Draw(spriteBatch);
+            bluePlayer.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
