@@ -20,13 +20,31 @@
       <Time>2012-03-28T12:32:58.0678677+02:00</Time>
     </Item>
     <Item>
-      <Source>player.jpg</Source>
-      <Name>player</Name>
+      <Source>playerR.jpg</Source>
+      <Name>playerR</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\player.xnb</Output>
+      <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\playerR.xnb</Output>
       <Time>2012-03-28T21:26:41.3373678+02:00</Time>
+    </Item>
+    <Item>
+      <Source>playerL.jpg</Source>
+      <Name>playerL</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\playerL.xnb</Output>
+      <Time>2012-03-28T21:58:30.9965941+02:00</Time>
+    </Item>
+    <Item>
+      <Source>font.spritefont</Source>
+      <Name>font</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\font.xnb</Output>
+      <Time>2012-03-28T23:56:48.6465564+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

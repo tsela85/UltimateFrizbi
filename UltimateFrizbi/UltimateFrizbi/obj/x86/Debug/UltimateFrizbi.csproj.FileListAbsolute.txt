@@ -6,4 +6,6 @@ C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi
 C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\obj\x86\Debug\UltimateFrizbi.pdb
 C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\goal.xnb
 C:\Users\Tom\documents\visual studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\Football_field.xnb
-C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\player.xnb
+C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\playerR.xnb
+C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\playerL.xnb
+C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\font.xnb

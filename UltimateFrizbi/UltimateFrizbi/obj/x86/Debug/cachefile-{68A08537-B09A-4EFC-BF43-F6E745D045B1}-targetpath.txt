@@ -1,3 +1,5 @@
 Content\goal.xnb
 Content\Football_field.xnb
-Content\player.xnb
+Content\playerR.xnb
+Content\playerL.xnb
+Content\font.xnb
