@@ -21,7 +21,7 @@ namespace UltimateFrizbi
 
     class player
     {
-        const int numberOfPivots = 3;
+        const int numberOfPivots = 4;
         const int size = 30;
 
         public Texture2D PlayerTexture;
@@ -74,10 +74,12 @@ namespace UltimateFrizbi
                 {
                     if (keybState.IsKeyDown(Keys.Left) && lastKbs.IsKeyUp(Keys.Left))
                     {
-                        currentPivot = (currentPivot - 1) % 3;
+                        currentPivot = (currentPivot - 1) % numberOfPivots;
+                        currentPivot += (currentPivot == -1 ? numberOfPivots : 0);
+                        
                     }
                     if (keybState.IsKeyDown(Keys.Right) && lastKbs.IsKeyUp(Keys.Right))
-                        currentPivot = (currentPivot + 1) % 3;
+                        currentPivot = (currentPivot + 1) % numberOfPivots;
                     //choose player
                     if (keybState.IsKeyDown(Keys.Enter) && lastKbs.IsKeyUp(Keys.Enter))
                     {
@@ -121,7 +123,7 @@ namespace UltimateFrizbi
                 pivots[currentPivot].Position.X = screenWidth - 69;
             if (pivots[currentPivot].Position.X < 42)
                 pivots[currentPivot].Position.X = 42;
-            pivots[currentPivot].Position.Y += (float)Math.Sin(pivots[currentPivot].angle) * pivots[currentPivot].power;
+            pivots[currentPivot].Position.Y -= (float)Math.Sin(pivots[currentPivot].angle) * pivots[currentPivot].power;
             if (pivots[currentPivot].Position.Y > screenHeight - 50)
                 pivots[currentPivot].Position.Y = screenHeight - 50;
             if (pivots[currentPivot].Position.Y < 20)
