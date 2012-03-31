@@ -29,6 +29,7 @@ namespace UltimateFrizbi
         int screenWidth;
         int screenHeight;
         player bluePlayer, redPlayer;
+        int playerTurn;
 
         public Game1()
         {
@@ -60,6 +61,7 @@ namespace UltimateFrizbi
             graphics.ApplyChanges();
             bluePlayer = new player();
             redPlayer = new player();
+            playerTurn = 1;
             base.Initialize();
         }
 
@@ -108,8 +110,10 @@ namespace UltimateFrizbi
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
-            redPlayer.Update();
+            if (playerTurn == 1)
+                playerTurn *= redPlayer.Update();
+            else
+                playerTurn *=  bluePlayer.Update();
             base.Update(gameTime);
         }
 

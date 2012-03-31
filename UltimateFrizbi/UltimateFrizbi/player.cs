@@ -21,7 +21,7 @@ namespace UltimateFrizbi
 
     class player
     {
-        const int numberOfPivots = 4;
+        const int numberOfPivots = 3;
         const int size = 30;
 
         public Texture2D PlayerTexture;
@@ -65,9 +65,11 @@ namespace UltimateFrizbi
             }
         }
 
-        private void ProcessKeyboard()
+        private int ProcessKeyboard()
         {
             KeyboardState keybState = Keyboard.GetState();
+            int chosen = 1;
+
             if (lastKbs != null)
             {
                 if (!pivotChosen)
@@ -81,12 +83,12 @@ namespace UltimateFrizbi
                     if (keybState.IsKeyDown(Keys.Right) && lastKbs.IsKeyUp(Keys.Right))
                         currentPivot = (currentPivot + 1) % numberOfPivots;
                     //choose player
-                    if (keybState.IsKeyDown(Keys.Enter) && lastKbs.IsKeyUp(Keys.Enter))
+                    if (!lastKbs.IsKeyDown(Keys.Enter) && keybState.IsKeyDown(Keys.Enter))
                     {
                         pivotChosen = true;
                     }
                 }
-                else
+                else //pivot is chosen
                 {
                     //Angle
                     if (keybState.IsKeyDown(Keys.Left))
@@ -106,14 +108,16 @@ namespace UltimateFrizbi
                     if (pivots[currentPivot].power < 0)
                         pivots[currentPivot].power = 0;
                     //move pivot
-                    if (keybState.IsKeyDown(Keys.Enter) && lastKbs.IsKeyUp(Keys.Enter))
+                    if (!lastKbs.IsKeyDown(Keys.Enter) && keybState.IsKeyDown(Keys.Enter))
                     {
                         calcPivotPosition(currentPivot);
                         pivotChosen = false;
+                        chosen = -1;
                     }
                 }
             }
             lastKbs = keybState;
+            return chosen;
         }
 
         private void calcPivotPosition(int pivot)
@@ -132,9 +136,9 @@ namespace UltimateFrizbi
             pivots[currentPivot].rec.Y = (int)pivots[currentPivot].Position.Y;
         }
 
-        public void Update()
+        public int Update()
         {
-            ProcessKeyboard();
+            return ProcessKeyboard();
         }
 
         public void Draw(SpriteBatch spriteBatch)
