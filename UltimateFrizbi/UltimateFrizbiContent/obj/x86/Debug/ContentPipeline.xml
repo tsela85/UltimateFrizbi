@@ -8,7 +8,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\goal.xnb</Output>
-      <Time>2012-03-28T00:53:54.9842827+02:00</Time>
+      <Time>2012-03-31T17:57:41.5438588+03:00</Time>
     </Item>
     <Item>
       <Source>Football_field.jpg</Source>
@@ -45,6 +45,24 @@
       <Options>None</Options>
       <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\font.xnb</Output>
       <Time>2012-03-28T23:56:48.6465564+02:00</Time>
+    </Item>
+    <Item>
+      <Source>FRIZBI.jpg</Source>
+      <Name>FRIZBI</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\FRIZBI.xnb</Output>
+      <Time>2012-03-31T19:16:58.5285402+03:00</Time>
+    </Item>
+    <Item>
+      <Source>ScoreFont.spritefont</Source>
+      <Name>ScoreFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\ScoreFont.xnb</Output>
+      <Time>2012-03-31T20:00:03.242355+03:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

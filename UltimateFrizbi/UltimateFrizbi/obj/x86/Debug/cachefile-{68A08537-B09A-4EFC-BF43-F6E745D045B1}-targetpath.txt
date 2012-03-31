@@ -3,3 +3,5 @@ Content\Football_field.xnb
 Content\playerR.xnb
 Content\playerL.xnb
 Content\font.xnb
+Content\FRIZBI.xnb
+Content\ScoreFont.xnb

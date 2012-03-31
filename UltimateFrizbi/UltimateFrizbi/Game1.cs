@@ -20,20 +20,22 @@ namespace UltimateFrizbi
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        SpriteFont font;
+        SpriteFont font,scoreFont;
         GraphicsDevice device;
         Texture2D goalTexture; // Texture for the goals
         Texture2D fieldTexture; // Texture for the goals
-        Rectangle player1Goal,player2Goal; // goal 1,2 Rectangle
+        Rectangle blueplayerGoal,redplayerGoal; // goal 1,2 Rectangle
         Rectangle fieldRectnagle;
         int screenWidth;
         int screenHeight;
-        player bluePlayer, redPlayer;
+        Player bluePlayer, redPlayer;
         int playerTurn;
+        Frizbi frizbi;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+
             //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
         }
@@ -59,8 +61,9 @@ namespace UltimateFrizbi
             graphics.PreferredBackBufferHeight = 600;
             graphics.PreferredBackBufferWidth = 1200;
             graphics.ApplyChanges();
-            bluePlayer = new player();
-            redPlayer = new player();
+            bluePlayer = new Player();
+            redPlayer = new Player();
+            frizbi = new Frizbi();
             playerTurn = 1;
             base.Initialize();
         }
@@ -78,16 +81,18 @@ namespace UltimateFrizbi
             screenHeight = device.PresentationParameters.BackBufferHeight;
             //font
             font = Content.Load<SpriteFont>(@"font");
+            scoreFont = Content.Load<SpriteFont>(@"ScoreFont");
             // field
             goalTexture = Content.Load<Texture2D>(@"goal");
             fieldTexture = Content.Load<Texture2D>(@"Football_field");
-            player1Goal = new Rectangle(42, (screenHeight / 2) - 80, 32, 160);
-            player2Goal = new Rectangle(screenWidth - 70, (screenHeight / 2) - 80, 32, 160);
+            blueplayerGoal = new Rectangle(42, (screenHeight / 2) - 80, 32, 160);
+            redplayerGoal = new Rectangle(screenWidth - 70, (screenHeight / 2) - 80, 32, 160);
             fieldRectnagle = new Rectangle(0, 0, screenWidth, screenHeight);
             // Load the player resources 
-            redPlayer.Initialize(Content.Load<Texture2D>(@"playerR"), new Vector2(screenWidth-211,screenHeight/2),Color.OrangeRed,font,screenHeight,screenWidth);
-            bluePlayer.Initialize(Content.Load<Texture2D>(@"playerL"), new Vector2(105, screenHeight / 2), Color.BlueViolet, font, screenHeight, screenWidth);
-
+            redPlayer.Initialize(Content.Load<Texture2D>(@"playerR"), new Vector2(screenWidth-211,screenHeight/2),Color.Red,font,screenHeight,screenWidth,blueplayerGoal);
+            bluePlayer.Initialize(Content.Load<Texture2D>(@"playerL"), new Vector2(105, screenHeight / 2), Color.Blue, font, screenHeight, screenWidth,redplayerGoal);
+            frizbi.Initialize(Content.Load<Texture2D>(@"FRIZBI"),new Vector2(105, (screenHeight / 2)-15),screenHeight, screenWidth);
+            bluePlayer.moveChosenToFrizbi(frizbi);
         }
 
         /// <summary>
@@ -110,10 +115,18 @@ namespace UltimateFrizbi
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (playerTurn == 1)
-                playerTurn *= redPlayer.Update();
+            if (playerTurn != 1)
+            {
+                if (!frizbi.getAtPlayerHand) 
+                    redPlayer.moveChosenToFrizbi(frizbi);
+                playerTurn *= redPlayer.Update(frizbi);
+            }
             else
-                playerTurn *=  bluePlayer.Update();
+            {
+                if (!frizbi.getAtPlayerHand)
+                    bluePlayer.moveChosenToFrizbi(frizbi);
+                playerTurn *= bluePlayer.Update(frizbi);
+            }
             base.Update(gameTime);
         }
 
@@ -128,8 +141,10 @@ namespace UltimateFrizbi
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             DrawField();
+            spriteBatch.DrawString(scoreFont, bluePlayer.Score + ":" + redPlayer.Score, new Vector2((screenWidth/2)-33,15), Color.Black);
             redPlayer.Draw(spriteBatch);
             bluePlayer.Draw(spriteBatch);
+            frizbi.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -138,8 +153,8 @@ namespace UltimateFrizbi
         private void DrawField() 
         {
             spriteBatch.Draw(fieldTexture, fieldRectnagle, Color.White);
-            spriteBatch.Draw(goalTexture, player1Goal, Color.Blue);
-            spriteBatch.Draw(goalTexture, player2Goal, Color.Red);
+            spriteBatch.Draw(goalTexture, blueplayerGoal, Color.Blue);
+            spriteBatch.Draw(goalTexture, redplayerGoal, Color.Red);
             }
     }
 }

@@ -19,12 +19,13 @@ namespace UltimateFrizbi
         // TODO: add atributes in the future
     }
 
-    class player
+    class Player
     {
         const int numberOfPivots = 3;
         const int size = 30;
 
         public Texture2D PlayerTexture;
+
         SpriteFont playerFont;
         Color playerColor;
         int playerScore;
@@ -33,6 +34,7 @@ namespace UltimateFrizbi
         public bool pivotChosen;
         int screenHeight, screenWidth;
         KeyboardState lastKbs;
+        Rectangle goal;
 
 
         public int Score
@@ -40,9 +42,9 @@ namespace UltimateFrizbi
             get { return playerScore; }
         }
 
-        public void Initialize(Texture2D texture, Vector2 position,Color color, SpriteFont font,int sHeight,int sWidth)
+        public void Initialize(Texture2D texture, Vector2 position,Color color, SpriteFont font,int sHeight,int sWidth,Rectangle oppositeGoal)
         {
-
+           
             PlayerTexture = texture;
             playerFont = font;
             playerColor = color;
@@ -51,6 +53,7 @@ namespace UltimateFrizbi
             pivotChosen = false;
             screenHeight = sHeight;
             screenWidth = sWidth;
+            goal = oppositeGoal;
 
             pivots = new pivot[numberOfPivots];
 
@@ -65,7 +68,7 @@ namespace UltimateFrizbi
             }
         }
 
-        private int ProcessKeyboard()
+        public int Update(Frizbi frizbi)
         {
             KeyboardState keybState = Keyboard.GetState();
             int chosen = 1;
@@ -74,11 +77,12 @@ namespace UltimateFrizbi
             {
                 if (!pivotChosen)
                 {
+                    #region switch between pivots
                     if (keybState.IsKeyDown(Keys.Left) && lastKbs.IsKeyUp(Keys.Left))
                     {
                         currentPivot = (currentPivot - 1) % numberOfPivots;
                         currentPivot += (currentPivot == -1 ? numberOfPivots : 0);
-                        
+
                     }
                     if (keybState.IsKeyDown(Keys.Right) && lastKbs.IsKeyUp(Keys.Right))
                         currentPivot = (currentPivot + 1) % numberOfPivots;
@@ -87,6 +91,8 @@ namespace UltimateFrizbi
                     {
                         pivotChosen = true;
                     }
+                    #endregion
+
                 }
                 else //pivot is chosen
                 {
@@ -103,14 +109,17 @@ namespace UltimateFrizbi
                     if (keybState.IsKeyDown(Keys.Up))
                         pivots[currentPivot].power += 1;
                     //fix power
-                    if (pivots[currentPivot].power > 100)
-                        pivots[currentPivot].power = 100;
+                    if (pivots[currentPivot].power > 300)
+                        pivots[currentPivot].power = 300;
                     if (pivots[currentPivot].power < 0)
                         pivots[currentPivot].power = 0;
                     //move pivot
                     if (!lastKbs.IsKeyDown(Keys.Enter) && keybState.IsKeyDown(Keys.Enter))
                     {
-                        calcPivotPosition(currentPivot);
+                        if (pivots[currentPivot].hasFrizbi)
+                            throwFrizbi(frizbi);
+                        else
+                            calcPivotPosition();
                         pivotChosen = false;
                         chosen = -1;
                     }
@@ -120,37 +129,94 @@ namespace UltimateFrizbi
             return chosen;
         }
 
-        private void calcPivotPosition(int pivot)
+        private void throwFrizbi(Frizbi frizbi)
         {
-            pivots[currentPivot].Position.X += (float)Math.Cos(pivots[currentPivot].angle) * pivots[currentPivot].power;
+            Vector2 newFrizbiPos = frizbi.getPosition;
+            int i;
+
+            pivots[currentPivot].hasFrizbi = false;
+            newFrizbiPos.X -= (float)Math.Sin(pivots[currentPivot].angle) * pivots[currentPivot].power;
+            if (newFrizbiPos.X > screenWidth - 69)
+                newFrizbiPos.X = screenWidth - 69;
+            if (newFrizbiPos.X < 42)
+                newFrizbiPos.X = 42;
+            newFrizbiPos.Y += (float)Math.Cos(pivots[currentPivot].angle) * pivots[currentPivot].power;
+            if (newFrizbiPos.Y > screenHeight - 50)
+                newFrizbiPos.Y = screenHeight - 50;
+            if (newFrizbiPos.Y < 20)
+                newFrizbiPos.Y = 20;
+            frizbi.setPosition(newFrizbiPos);
+
+            i = checkGoodPass(newFrizbiPos);
+            if (i != -1)
+            {
+                currentPivot = i;
+                moveChosenToFrizbi(frizbi);
+                checkIfGoal(frizbi);
+            }
+            else
+                frizbi.frizbeLandedOnTheGround();
+        }
+
+        private void checkIfGoal(Frizbi frizbi)
+        {
+            if (pivots[currentPivot].rec.Intersects(goal))
+            {
+                playerScore++;
+                pivots[currentPivot].hasFrizbi = false;
+                frizbi.frizbeLandedOnTheGround();
+            }
+        }
+
+        private int checkGoodPass(Vector2 pos)
+        {
+            for (int i = 0; i < numberOfPivots; i++)
+                if ((i != currentPivot) && (Math.Abs(pos.X - pivots[i].Position.X) < 60) && (Math.Abs(pos.Y - pivots[i].Position.Y) < 60))
+                    return i;
+            return -1;
+        }
+
+
+        public void moveChosenToFrizbi(Frizbi frizbi)
+        {
+            pivots[currentPivot].Position = frizbi.getPosition;
+            pivots[currentPivot].rec.X = (int)pivots[currentPivot].Position.X;
+            pivots[currentPivot].rec.Y = (int)pivots[currentPivot].Position.Y;
+
+            pivots[currentPivot].hasFrizbi = true;
+            frizbi.atPlayerHand = true;
+        }
+
+        private void calcPivotPosition()
+        {
+            pivots[currentPivot].Position.X -= (float)Math.Sin(pivots[currentPivot].angle) * pivots[currentPivot].power;
             if (pivots[currentPivot].Position.X > screenWidth - 69)
                 pivots[currentPivot].Position.X = screenWidth - 69;
             if (pivots[currentPivot].Position.X < 42)
                 pivots[currentPivot].Position.X = 42;
-            pivots[currentPivot].Position.Y -= (float)Math.Sin(pivots[currentPivot].angle) * pivots[currentPivot].power;
+            pivots[currentPivot].Position.Y += (float)Math.Cos(pivots[currentPivot].angle) * pivots[currentPivot].power;
             if (pivots[currentPivot].Position.Y > screenHeight - 50)
                 pivots[currentPivot].Position.Y = screenHeight - 50;
             if (pivots[currentPivot].Position.Y < 20)
-                pivots[currentPivot].Position.Y = 20;            
+                pivots[currentPivot].Position.Y = 20;
             pivots[currentPivot].rec.X = (int)pivots[currentPivot].Position.X;
             pivots[currentPivot].rec.Y = (int)pivots[currentPivot].Position.Y;
         }
 
-        public int Update()
-        {
-            return ProcessKeyboard();
-        }
-
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < numberOfPivots; i++) {
+            for (int i = 0; i < numberOfPivots; i++)
+            {
                 if (i != currentPivot)
-                    spriteBatch.Draw(PlayerTexture, pivots[i].rec, null,playerColor);
+                    spriteBatch.Draw(PlayerTexture, pivots[i].rec, null, playerColor);
                 else
                 {
-                    spriteBatch.Draw(PlayerTexture, pivots[i].rec, null, Color.Tan);
+                    spriteBatch.Draw(PlayerTexture, pivots[i].rec, null, playerColor);
                     spriteBatch.DrawString(playerFont, "Power:" + pivots[i].power + "\nAngle:" +
-                        (int)MathHelper.ToDegrees((pivots[i].angle) % (2 * MathHelper.Pi)), pivots[i].Position + (pivots[i].Position.Y < screenHeight - 100 ? new Vector2(0, 50) : -new Vector2(0, 50)), Color.Black);
+                        (int)MathHelper.ToDegrees((pivots[i].angle) % (2 * MathHelper.Pi))
+                        , pivots[i].Position + (pivots[i].Position.Y < screenHeight - 100 ? new Vector2(0, 50) : -new Vector2(0, 50)), Color.Black);
+                    spriteBatch.Draw(PlayerTexture, new Rectangle((int)pivots[i].Position.X,(int)pivots[i].Position.Y,5,pivots[i].power), null, playerColor
+                        , pivots[i].angle , new Vector2(0, 0), SpriteEffects.None, 0);
                 }
             }
         }

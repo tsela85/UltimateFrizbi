@@ -9,3 +9,5 @@ C:\Users\Tom\documents\visual studio 2010\Projects\UltimateFrizbi\UltimateFrizbi
 C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\playerR.xnb
 C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\playerL.xnb
 C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\font.xnb
+C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\FRIZBI.xnb
+C:\Users\Tom\Documents\Visual Studio 2010\Projects\UltimateFrizbi\UltimateFrizbi\UltimateFrizbi\bin\x86\Debug\Content\ScoreFont.xnb
